@@ -1,4 +1,4 @@
-# Login CSS Advanced
+# CSS Advanced - Glassmorphism Login
 In questo articolo vedremo come utilizzare alcune regole basilari di CSS in maniera creativa e aggiungeremo un pizzico di proprietà avanzate per realizzare qualche effetto *speciale*.
 
 ![Screen Large Dark](./screens/login-dark-lg.png)
