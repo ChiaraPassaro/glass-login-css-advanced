@@ -1,0 +1,261 @@
+:root {
+  color-scheme: light dark;
+
+  --blue: rgb(56 89 132);
+  --red: rgb(157 41 41);
+  --gray: rgb(91, 93, 95);
+  --lightGray: rgb(202, 209, 218);
+  --grayDark: rgb(84, 84, 84);
+
+  --bodyColor: white;
+  --heartColorColor: var(--red);
+  --overlayBg: linear-gradient(-140deg, 
+                              rgb(74 16 74), 
+                              rgb(13 1 43) 80%, 
+                              rgb(53 21 53)); 
+  /* circle is the shape of gradient at position left top */
+  --overlayBeforeBg: radial-gradient(circle at 86% 23%,  
+                                    rgb(157 68 152  / 0.9) 0%, 
+                                    rgb(74 18 69 / 0.9) 30%, 
+                                    rgba(22 15 56 / 0.9) 77%, 
+                                    rgba(165 12 150 / 0.577) 100%);
+  --overlayAfterBg: radial-gradient( circle at 95% 6%, 
+                                    rgb(56 89 132 / 0.9) 0%,
+                                    rgb(27 63 111  / 0.9) 30%, 
+                                    rgb(11 27 48  / 0.9) 77%, 
+                                    rgb(8 73 157  / 0.9) 100%);
+  --cardBg: linear-gradient(150deg, 
+                            rgb(255 255 255 / 0.1), 
+                            rgb(255 255 255 / 0.1) 2%, 
+                            rgb(255 255 255 /0.2)3%, 
+                            rgb(255 255 255 /0.1) 4%, 
+                            rgb(255 255 255 /0.1) 12%, 
+                            rgb(255 255 255 /0.2) 23%, 
+                            rgb(255 255 255 /0.1) 25%, 
+                            rgb(255 255 255 / 0.1) 94%, 
+                            rgb(255 255 255 / 0.2) 95%, 
+                            rgb(255 255 255 /0.1) 96%);
+  --cardBeforeBG: linear-gradient(-45deg,
+                                  rgb(255 255 255 / 0.2) 5%, 
+                                  rgb(255 255 255 / 0.2) 30%,
+                                  rgb(193 73 197 / 0.2));
+  /* first gradient mask source and second gradient mask destination  */
+  --cardMask: linear-gradient(white 0 0) padding-box, 
+              linear-gradient(white 0 0) content-box;
+  --inputColor: var(--gray);
+  --inputBorder: 1px solid transparent;
+  --inputBorderFocus: white;
+  --inputBoxFocus: var(--blue);
+  --inputBg: white;
+  --labelColor: var(--blue);
+  --labelLetterSpacing: normal;
+  --labelFontWeight: normal;
+  --btnHoverBg: var(--blue);
+  --btnBorderHover: white;
+  --btnColor: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --btnPlaceholderColor: white;
+    --labelColor: white;
+    --inputColor: var(--lightGray);
+    --inputBorder: 1px solid white;
+    --inputBorderFocus: white;
+    --inputBg: var(--grayDark);
+    --labelLetterSpacing:  0.05rem;
+    --labelFontWeight: bold; 
+  }
+}
+
+/* reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* common */
+html {
+  font-family: 'Outfit', sans-serif;
+  font-size: 100%;
+  color: var(--bodyColor);
+  /* writing-mode: vertical-lr; */
+}
+
+.red {
+  color: var(--heartColor)
+}
+
+/* typography */
+h1 {
+  margin-block-end: 1rem;
+  text-transform: uppercase;
+}
+
+/* layout */
+.overlay {
+  position: relative;
+  inline-size: 100%;
+  block-size: 100vh;
+  background: var(--overlayBg); 
+} 
+.overlay::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset-block-start: 15%;
+  inset-inline-start:  17%;
+  inline-size: 25vw;
+  block-size: 25vw;
+  border-radius: 100%;
+  background: var(--overlayBeforeBg);
+}
+.overlay::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset-block-end:  25%;
+  inset-inline-end:  30%;
+  inline-size: 10vw;
+  block-size: 10vw;
+  border-radius: 100%;
+  background: var(--overlayAfterBg);
+}
+
+.card {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start:  50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  inline-size: 50%;
+  min-inline-size: 18.75rem;
+  max-inline-size: 28.125rem;
+  padding: 2rem;
+  border-radius: 2rem;
+  background: var(--cardBg) border-box; 
+  filter: drop-shadow(2px 2px 10px rgb(0 0 0));
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+/* create an element for masking and border */
+.card::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  padding: 2px; 
+  background: var(--cardBeforeBG); 
+  border-radius: 2rem; 
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/mask */
+  mask: var(--cardMask);
+  /* The non-overlapping regions of source and destination are combined. */
+  mask-composite: exclude;  
+  
+  /* chrome */
+  -webkit-mask: var(--cardMask);
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-mask-composite */
+  /* exclude top layer from the bottom */
+  /* xor
+  Overlapping pixels in the source mask image and the destination mask image become fully transparent if they are both fully opaque. */
+  -webkit-mask-composite: xor;
+}
+
+.card__form .row {
+  position: relative;
+  margin-block-end: 1rem;
+  font-size: 1.5rem;
+}
+
+.card__form input {
+  inline-size: 100%;
+  padding-inline: 0.5rem;
+  border: var(--inputBorder);
+  border-radius: 0.5rem;
+  background-color: var(--inputBg);
+  line-height: 2.2rem;
+  font-size: 1rem;  
+  transition: padding 0.2s;
+}
+.card__form input::placeholder {
+  color: var(--inputColor);
+}
+.card__form input:focus, 
+.card__form input:not(:placeholder-shown) {
+  padding-block: 0.8rem 0.1rem;
+  outline: none;
+}
+.card__form input:focus{
+  border: 2px solid var(--inputBorderFocus);
+}
+.card__form input:focus::placeholder {
+  color: transparent;
+}
+@media screen and (prefers-color-scheme: light) {
+  .card__form input:focus {
+    outline: 2px solid var(--inputBoxFocus);
+    outline-offset: -4px;
+  }
+}
+
+.card__form label {
+  position: absolute;
+  display: none;
+  font-size: 0.9rem;
+  color: var(--labelColor);
+}
+.card__form input:focus + label,
+.card__form input:not(:placeholder-shown) + label {
+  display: block;
+  inset-block-start: 0.3rem;
+  inset-inline-start:  0.5rem; 
+  font-weight: var(--labelFontWeight);
+  letter-spacing: var(--labelLetterSpacing);
+  animation-name: labelAnimation;
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+}
+@media screen and (prefers-reduced-motion: reduce) {
+  .card__form input:focus + label,
+  .card__form input:not(:placeholder-shown) + label {
+    animation-duration: 1.5s;
+  }
+}
+
+.card__form .btn {
+  padding-inline: 0.5rem;
+  /* without border we have a layout shift */
+  border: 1px solid transparent; 
+  border-radius: 0.5rem;
+  line-height: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.card__form .btn:hover, 
+.card__form .btn:focus {
+  background-color: var(--btnHoverBg);
+  border: 1px solid var(--btnBorderHover);
+  outline: none;
+  color: var(--btnColor);
+}
+
+.overlay__copy {
+  position: absolute;
+  inset-block-end:  0.5rem;
+  inset-inline-end:  0.5rem;
+}
+
+@keyframes labelAnimation {
+  0% {
+    display: none;
+    inset-block-start: 50%;
+    transform: translate-Y(-50%);
+  }
+  100% {
+    display: block;
+    inset-block-start: 0.3rem;
+    transform: translate-Y(0);
+  } 
+}
